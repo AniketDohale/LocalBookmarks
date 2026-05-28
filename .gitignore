@@ -1,0 +1,6 @@
+temporary.txt
+instance
+env/
+__pycache__/
+*.py[cod]
+*$py.class
