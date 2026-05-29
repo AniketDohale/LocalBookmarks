@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Bookmark</title>
+</head>
+<body>
+
+    <h1>LocalBookmark</h1>
+
+    <nav>
+        <a href="/">Home</a> |
+        <a href="/favorites-page">Favorites</a>
+    </nav>
+
+    <hr>
+
+    <h2>Add Bookmark</h2>
+
+    <form id="bookmarkForm">
+
+        <div>
+            <label>Title</label><br>
+            <input type="text" id="title" required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>URL</label><br>
+            <input type="text" id="url" required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Category</label><br>
+            <input type="text" id="category">
+        </div>
+
+        <br>
+
+        <div>
+            <label>Tags (comma separated)</label><br>
+            <input type="text" id="tags">
+        </div>
+
+        <br>
+
+        <button type="submit">
+            Add Bookmark
+        </button>
+
+    </form>
+
+    <hr>
+
+    <div id="message"></div>
+
+    <script>
+
+        document
+            .getElementById("bookmarkForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+                const payload = {
+
+                    title: document.getElementById("title").value,
+
+                    url: document.getElementById("url").value,
+
+                    category: document.getElementById("category").value,
+
+                    tags: document
+                        .getElementById("tags")
+                        .value
+                        .split(",")
+                        .map(tag => tag.trim())
+                        .filter(tag => tag !== "")
+                };
+
+                const response = await fetch("/api/bookmarks", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+
+                    document.getElementById("message").innerHTML = `
+                        <p>Bookmark Added Successfully</p>
+                    `;
+
+                    document.getElementById("bookmarkForm").reset();
+
+                } else {
+
+                    document.getElementById("message").innerHTML = `
+                        <p>${data.message}</p>
+                    `;
+                }
+            });
+
+    </script>
+
+</body>
+</html>

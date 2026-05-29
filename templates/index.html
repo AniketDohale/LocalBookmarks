@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bookmark Categories</title>
+</head>
+<body>
+
+    <h1>LocalBookmarks</h1>
+
+    <nav>
+        <a href="/add">Add Bookmark</a> |
+        <a href="/favorites-page">Favorites</a>
+    </nav>
+
+    <hr>
+
+    <h2> Categories </h2>
+
+    <div id="categories"></div>
+
+    <script>
+
+        async function loadCategories() {
+
+            const response = await fetch("/api/categories");
+            const data = await response.json();
+
+            let output = "";
+
+            if (data.data.length === 0) {
+
+                output = "<p>No categories found</p>";
+
+            } else {
+
+                data.data.forEach(category => {
+
+                    output += `
+                        <div>
+
+                            <h3>
+                                <a href="/category/${category.name}">
+                                    ${category.name}
+                                </a>
+                            </h3>
+
+                            <hr>
+
+                        </div>
+                    `;
+                });
+            }
+
+            document.getElementById("categories").innerHTML = output;
+        }
+
+        loadCategories();
+
+    </script>
+
+</body>
+</html>
