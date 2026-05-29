@@ -1,5 +1,5 @@
 from flask import Flask, request
-from models import db, Bookmark
+from models import db, Bookmark, Tag, Category
 from utils import is_Valid_Url, response
 
 app = Flask(__name__)
@@ -17,43 +17,102 @@ with app.app_context():
 # Add Bookmark
 @app.route("/api/bookmarks", methods=["POST"])
 def add_Bookmark():
-
     data = request.get_json()
 
     # CASE 1: Bulk Insert
     # if isinstance(data, list):
-    #     created = []
 
-    #     for item in data:
+    #     created = []
+    #     skipped = []
+
+    #     for index, item in enumerate(data):
     #         title = item.get("title")
     #         url = item.get("url")
+    #         tags_data = item.get("tags", [])
+    #         category_name = item.get("category")
 
+    #         # Validate Required Fields
     #         if not title or not url:
+    #             skipped.append({
+    #                 "index": index,
+    #                 "reason": "Title and URL are Required"
+    #             })
     #             continue
 
-    #         if not is_Valid_Url(url):
+    #         # Normalize URL
+    #         cleaned_url = url.strip().lower().rstrip("/")
+
+    #         # Validate URL
+    #         if not is_Valid_Url(cleaned_url):
+    #             skipped.append({
+    #                 "index": index,
+    #                 "url": cleaned_url,
+    #                 "reason": "Invalid URL"
+    #             })
     #             continue
 
+    #         # Prevent Duplicate URLs
+    #         existing_bookmark = Bookmark.query.filter_by(url=cleaned_url).first()
+    #         if existing_bookmark:
+    #             skipped.append({
+    #                 "index": index,
+    #                 "url": cleaned_url,
+    #                 "reason": "Bookmark already exists"
+    #             })
+    #             continue
+
+    #         # Handle Category FIRST (Before creating Bookmark)
+    #         category = None
+    #         if category_name:
+    #             cleaned_category = category_name.strip().lower()
+    #             category = Category.query.filter_by(name=cleaned_category).first()
+
+    #             if not category:
+    #                 category = Category(name=cleaned_category)
+    #                 db.session.add(category)
+
+    #         # Create and Explicitly Track the Bookmark in the Session
     #         bookmark = Bookmark(
-    #             title=title,
-    #             url=url.strip().lower().rstrip("/")
+    #             title=title.strip(),
+    #             url=cleaned_url,
+    #             category=category
     #         )
-
+    #         # Added Early to Avoid Autoflush Warnings
     #         db.session.add(bookmark)
-    #         created.append(bookmark)
 
+    #         # Handle Tags
+    #         for tag_name in tags_data:
+    #             cleaned_tag = tag_name.strip().lower()
+    #             if not cleaned_tag:
+    #                 continue
+
+    #             existing_tag = Tag.query.filter_by(name=cleaned_tag).first()
+
+    #             if existing_tag:
+    #                 bookmark.tags.append(existing_tag)
+    #             else:
+    #                 new_tag = Tag(name=cleaned_tag)
+    #                 db.session.add(new_tag)
+    #                 bookmark.tags.append(new_tag)
+
+    #         created.append(bookmark)
     #     db.session.commit()
 
     #     return response(
     #         success=True,
-    #         message=f"{len(created)} Bookmarks Created",
-    #         data=[b.to_dict() for b in created],
+    #         message=f"{len(created)} bookmarks created",
+    #         data={
+    #             "created": [b.to_dict() for b in created],
+    #             "skipped": skipped
+    #         },
     #         status_code=201
     #     )
 
     # CASE 2: Single Insert
     title = data.get("title")
     url = data.get("url")
+    category_name = data.get("category")
+    tags_data = data.get("tags", [])
 
     if not title or not url:
         return response(
@@ -61,21 +120,59 @@ def add_Bookmark():
             message="Title and URL are Required",
             status_code=400
         )
-    
+
     # URL Validation
     if not is_Valid_Url(url):
         return response(
             success=False,
-            message="Invalid URL. Must start with http:// or https://",
+            message="Invalid URL. Must Start with http:// or https://",
             status_code=400
         )
 
+    normalized_url = url.strip().lower().rstrip("/")
+
+    # Duplicate Check
+    existing_bookmark = Bookmark.query.filter_by(url=normalized_url).first()
+    if existing_bookmark:
+        return response(
+            success=False,
+            message="Bookmark Already Exists",
+            status_code=400
+        )
+
+    # Handle Category FIRST
+    category = None
+    if category_name:
+        cleaned_category = category_name.strip().lower()
+        category = Category.query.filter_by(name=cleaned_category).first()
+
+        if not category:
+            category = Category(name=cleaned_category)
+            db.session.add(category)
+
     bookmark = Bookmark(
         title=title,
-        url = url.strip().lower().rstrip("/")
+        url = normalized_url,
+        category=category
     )
-
+    # Tracked Before Querying Tags
     db.session.add(bookmark)
+
+    # Add Tags
+    for tag_name in tags_data:
+        cleaned = tag_name.strip().lower()
+
+        if not cleaned:
+            continue
+
+        existing_tag = Tag.query.filter_by(name=cleaned).first()
+        if existing_tag:
+            bookmark.tags.append(existing_tag)
+        else:
+            new_tag = Tag(name=cleaned)
+            db.session.add(new_tag)
+            bookmark.tags.append(new_tag)
+
     db.session.commit()
 
     return response(
@@ -85,11 +182,9 @@ def add_Bookmark():
         status_code=201
     )
 
-
 # Update Bookmark
 @app.route("/api/bookmarks/<string:bookmark_id>", methods=["PUT"])
 def update_Bookmark(bookmark_id):
-
     bookmark = db.session.get(Bookmark, bookmark_id)
 
     if not bookmark:
@@ -98,19 +193,54 @@ def update_Bookmark(bookmark_id):
             message="Bookmark Not Found",
             status_code=404
         )
-    
+
     data = request.get_json()
 
+    tags_data = data.get("tags")
     title = data.get("title")
     url = data.get("url")
+    category_name = data.get("category")  
 
     # URL Validation
-    if not is_Valid_Url(url):
+    if url and not is_Valid_Url(url):
         return response(
             success=False,
             message="Invalid URL. Must start with http:// or https://",
             status_code=400
         )
+    
+    # Add Tags
+    if tags_data is not None:
+        bookmark.tags.clear()
+
+        for tag_name in tags_data:
+            cleaned = tag_name.strip().lower()
+
+            if not cleaned:
+                continue
+
+            existing_tag = Tag.query.filter_by(name=cleaned).first()
+
+            if existing_tag:
+                bookmark.tags.append(existing_tag)
+            else:
+                new_tag = Tag(name=cleaned)
+                db.session.add(new_tag)
+                bookmark.tags.append(new_tag)
+    
+    # Update Category
+    if category_name is not None:
+        cleaned_category = category_name.strip().lower()
+
+        if cleaned_category == "":
+            bookmark.category = None
+        else:
+            category = Category.query.filter_by(name=cleaned_category).first()
+
+            if not category:
+                category = Category(name=cleaned_category)
+                db.session.add(category)
+            bookmark.category = category
 
     if title:
         bookmark.title = title
@@ -126,11 +256,9 @@ def update_Bookmark(bookmark_id):
         data=bookmark.to_dict()
     )
 
-
 # Delete Bookmark
 @app.route("/api/bookmarks/<string:bookmark_id>", methods=["DELETE"])
 def delete_Bookmark(bookmark_id):
-
     bookmark = db.session.get(Bookmark, bookmark_id)
 
     if not bookmark:
@@ -149,11 +277,29 @@ def delete_Bookmark(bookmark_id):
         data={"deleted_id": bookmark_id}
     )
 
+# Get Single Bookmark
+@app.route("/api/bookmarks/<string:bookmark_id>", methods=["GET"])
+def get_Bookmark(bookmark_id):
+    bookmark = db.session.get(Bookmark, bookmark_id)
+
+    if not bookmark:
+        return response(
+            success=False,
+            message="Bookmark Not Found",
+            status_code=404
+        )
+
+    return response(
+        success=True,
+        message="Bookmark Fetched",
+        data=bookmark.to_dict()
+    )
+
 # Get All Bookmarks
 @app.route("/api/bookmarks", methods=["GET"])
 def get_Bookmarks():
-
     query = request.args.get("q")
+    sort = request.args.get("sort", "newest")
 
     # Pagination
     page = request.args.get("page", 1, type=int)
@@ -161,10 +307,31 @@ def get_Bookmarks():
 
     page = max(1, page)
     limit = max(1, min(limit, 50))
-
     offset = (page - 1) * limit
 
+    tag = request.args.get("tag")
+    favorite = request.args.get("favorite")
+    category = request.args.get("category")
+
     bookmarks_query = Bookmark.query
+
+    # Tag Filter
+    if tag:
+        bookmarks_query = bookmarks_query.join(Bookmark.tags).filter(
+            Tag.name.ilike(f"%{tag.lower()}%")
+        )
+    
+    # Favorite Filter
+    if favorite and favorite.lower() == "true":
+        bookmarks_query = bookmarks_query.filter(
+            Bookmark.is_favorite == True
+        )
+    
+    # Category Filter
+    if category:
+        bookmarks_query = bookmarks_query.join(Category).filter(
+            Category.name.ilike(f"%{category.lower()}%")
+        )
 
     # Search Filter
     if query:
@@ -174,13 +341,12 @@ def get_Bookmarks():
         )
     
     total = bookmarks_query.count()
-
     total_pages = (total + limit - 1) // limit if total > 0 else 1
 
     if page > total_pages:
         return response(
             success=False,
-            message=f"Page {page} does not exist. Max page is {total_pages}.",
+            message=f"Page {page} does not Exist. Max Page is {total_pages}.",
             status_code=404,
             data={
                 "bookmarks": [],
@@ -195,9 +361,7 @@ def get_Bookmarks():
             }
         )
 
-     # Sorting Bookmarks
-    sort = request.args.get("sort", "newest")
-
+    # Sorting Bookmarks
     if sort == "oldest":
         bookmarks_query = bookmarks_query.order_by(Bookmark.created_at.asc())
     else:
@@ -227,6 +391,71 @@ def get_Bookmarks():
                 "has_prev": page > 1
             }
         }
+    )
+
+# Create Category
+@app.route("/api/categories", methods=["POST"])
+def create_Category():
+    data = request.get_json()
+    name = data.get("name")
+
+    if not name:
+        return response(
+            success=False,
+            message="Category Name is Required",
+            status_code=400
+        )
+
+    existing = Category.query.filter_by(name=name.strip().lower()).first()
+    if existing:
+        return response(
+            success=False,
+            message="Category Already Exists",
+            status_code=400
+        )
+
+    category = Category(name=name.strip().lower())
+
+    db.session.add(category)
+    db.session.commit()
+
+    return response(
+        success=True,
+        message="Category Created",
+        data=category.to_dict(),
+        status_code=201
+    )
+
+# Get Categories
+@app.route("/api/categories", methods=["GET"])
+def get_Categories():
+    categories = Category.query.order_by(Category.name.asc()).all()
+
+    return response(
+        success=True,
+        message="Categories Fetched",
+        data=[c.to_dict() for c in categories]
+    )
+
+# Favorite Bookmark
+@app.route("/api/bookmarks/<string:bookmark_id>/favorite", methods=["PATCH"])
+def toggle_Favorite(bookmark_id):
+    bookmark = db.session.get(Bookmark, bookmark_id)
+
+    if not bookmark:
+        return response(
+            success=False,
+            message="Bookmark Not Found",
+            status_code=404
+        )
+
+    bookmark.is_favorite = not bookmark.is_favorite
+    db.session.commit()
+
+    return response(
+        success=True,
+        message="Favorite Updated",
+        data=bookmark.to_dict()
     )
 
 
