@@ -25,6 +25,10 @@ def home():
 def category_bookmarks_page(category_name):
     return render_template("categories.html", category_name=category_name)
 
+@app.route("/add-category")
+def create_category_page():
+    return render_template("add_Category.html")
+
 @app.route("/add")
 def add_page():
     return render_template("add_bookmark.html")

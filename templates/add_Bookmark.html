@@ -34,7 +34,7 @@
 
         <div>
             <label>Category</label><br>
-            <input type="text" id="category">
+            <input type="text" id="category" readonly>
         </div>
 
         <br>
@@ -57,21 +57,14 @@
     <div id="message"></div>
 
     <script>
-
-        document
-            .getElementById("bookmarkForm")
-            .addEventListener("submit", async function(event) {
-
+        document.getElementById("bookmarkForm").addEventListener("submit", async function(event) {
                 event.preventDefault();
 
                 const payload = {
 
                     title: document.getElementById("title").value,
-
                     url: document.getElementById("url").value,
-
                     category: document.getElementById("category").value,
-
                     tags: document
                         .getElementById("tags")
                         .value
@@ -81,9 +74,7 @@
                 };
 
                 const response = await fetch("/api/bookmarks", {
-
                     method: "POST",
-
                     headers: {
                         "Content-Type": "application/json"
                     },
@@ -94,22 +85,30 @@
                 const data = await response.json();
 
                 if (data.success) {
-
                     document.getElementById("message").innerHTML = `
                         <p>Bookmark Added Successfully</p>
                     `;
-
                     document.getElementById("bookmarkForm").reset();
-
                 } else {
-
                     document.getElementById("message").innerHTML = `
                         <p>${data.message}</p>
                     `;
                 }
             });
 
-    </script>
+            function getQueryParam(name) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            }
 
+            window.onload = function () {
+                const category = getQueryParam("category");
+
+                if (category) {
+                    document.getElementById("category").value = category;
+                    document.getElementById("category").disabled = true;
+                }
+            };
+    </script>
 </body>
 </html>

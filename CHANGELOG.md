@@ -8,6 +8,41 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [v1.3.0] - 2026-05-30
+
+> ⚠️ This release is still under active development. Some features may be incomplete or subject to change.
+
+### Added
+- Added Category Rename API (`PUT /api/categories/<category_id>`)
+- Added Category Delete API (`DELETE /api/categories/<category_id>`)
+- Added frontend UI support for:
+  - Rename Category (prompt-based UI)
+  - Delete Category (confirmation-based UI)
+- Added automatic reload of category list after update/delete actions
+- Added safe handling for category-bookmark relationship during deletion
+
+### Changed
+- Improved Category model behavior:
+  - Categories now support safe rename without affecting bookmarks directly
+  - Bookmarks dynamically reflect updated category names via relationship
+- Updated category delete behavior:
+  - Deleting a category now removes all associated bookmarks (cascade delete)
+- Improved frontend category rendering:
+  - Categories now include `id` for UI actions (rename/delete)
+- Improved API consistency across category endpoints
+
+### Fixed
+- Fixed issue where category name updates were not reflected in bookmark responses immediately
+- Fixed missing category ID in frontend rendering causing inability to perform update/delete actions
+- Fixed relationship handling to ensure bookmarks remain consistent after category updates
+- Fixed UI refresh issues after category rename/delete operations
+
+### Notes
+- Category deletion is destructive and will permanently delete all associated bookmarks
+- Rename operation is safe and only updates category name (no data loss)
+
+--- 
+
 ## [v1.2.0] - 2026-05-30
 
 > ⚠️ This release is still under active development. Some features may be incomplete or subject to change.

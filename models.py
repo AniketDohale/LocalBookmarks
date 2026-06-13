@@ -51,7 +51,7 @@ class Bookmark(db.Model):
 
     category_id = db.Column(
         db.String(36),
-        db.ForeignKey("categories.id"),
+        db.ForeignKey("categories.id", ondelete="CASCADE"),
         nullable=True
     )
 
@@ -125,7 +125,8 @@ class Category(db.Model):
     bookmarks = db.relationship(
         "Bookmark",
         backref="category",
-        lazy=True
+        cascade="all, delete-orphan",
+        passive_deletes=True
     )
 
     def to_dict(self):

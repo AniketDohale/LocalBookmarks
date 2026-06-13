@@ -17,7 +17,6 @@
     <h2>Update Bookmark</h2>
 
     <form id="updateForm">
-
         <div>
             <label>Title</label><br>
             <input type="text" id="title">
@@ -49,7 +48,6 @@
         <button type="submit">
             Update Bookmark
         </button>
-
     </form>
 
     <hr>
@@ -57,17 +55,12 @@
     <div id="message"></div>
 
     <script>
-
         const bookmarkId = "{{ bookmark_id }}";
-
         async function loadBookmark() {
-
             const response = await fetch(
                 `/api/bookmarks/${bookmarkId}`
             );
-
             const data = await response.json();
-
             const bookmark = data.data;
 
             document.getElementById("title").value =
@@ -88,11 +81,8 @@
         document
             .getElementById("updateForm")
             .addEventListener("submit", async function(event) {
-
                 event.preventDefault();
-
                 const payload = {
-
                     title:
                         document.getElementById("title").value,
 
@@ -118,26 +108,20 @@
                         headers: {
                             "Content-Type": "application/json"
                         },
-
                         body: JSON.stringify(payload)
                     }
                 );
 
                 const data = await response.json();
-
                 if (data.success) {
 
                     document.getElementById("message").innerHTML =
                         "<p>Bookmark Updated Successfully</p>";
-
                 } else {
-
                     document.getElementById("message").innerHTML =
                         `<p>${data.message}</p>`;
                 }
             });
-
     </script>
-
 </body>
 </html>

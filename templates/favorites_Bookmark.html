@@ -9,7 +9,7 @@
 
     <nav>
         <a href="/">Home</a> |
-        <a href="/add">Add Bookmark</a>
+        <a href="/add-category">Create Category</a>
     </nav>
 
     <hr>
@@ -19,30 +19,21 @@
     <div id="favorites"></div>
 
     <script>
-
         async function loadFavorites() {
-
             const response = await fetch(
                 "/api/bookmarks?favorite=true"
             );
 
             const data = await response.json();
-
             let output = "";
 
             if (data.data.bookmarks.length === 0) {
-
                 output = "<p>No favorite bookmarks found</p>";
-
             } else {
-
                 data.data.bookmarks.forEach(bookmark => {
-
                     output += `
                         <div>
-
                             <h2>${bookmark.title}</h2>
-
                             <p>
                                 <a href="${bookmark.url}" target="_blank">
                                     ${bookmark.url}
@@ -50,8 +41,7 @@
                             </p>
 
                             <p>
-                                Category:
-                                ${bookmark.category || "None"}
+                                Category: ${bookmark.category || "None"}
                             </p>
 
                             <button onclick="removeFavorite('${bookmark.id}')"> Remove Favorite </button>
@@ -62,7 +52,6 @@
                     `;
                 });
             }
-
             document.getElementById("favorites").innerHTML = output;
         }
 
@@ -73,15 +62,14 @@
                     method: "PATCH" 
                 } 
             ); 
+
             const data = await response.json(); 
             if (data.success) { 
-                loadFavorites(); // refresh list 
+                loadFavorites();
                 } 
             }
 
         loadFavorites();
-
     </script>
-
 </body>
 </html>

@@ -50,3 +50,67 @@ def get_Categories():
         message="Categories Fetched",
         data=[c.to_dict() for c in categories]
     )
+
+# Rename Category
+@categories_bp.route("/api/categories/<string:category_id>", methods=["PUT"])
+def rename_Category(category_id):
+    category = db.session.get(Category, category_id)
+
+    if not category:
+        return response(
+            success=False,
+            message="Category Not Found",
+            status_code=404
+        )
+
+    data = request.get_json()
+    name = data.get("name")
+
+    if not name:
+        return response(
+            success=False,
+            message="Category Name is Required",
+            status_code=400
+        )
+
+    cleaned = name.strip().lower()
+    existing = Category.query.filter_by(name=cleaned).first()
+
+    if existing and existing.id != category.id:
+        return response(
+            success=False,
+            message="Category Already Exists",
+            status_code=400
+        )
+
+    category.name = cleaned
+    db.session.commit()
+
+    return response(
+        success=True,
+        message="Category Renamed",
+        data=category.to_dict()
+    )
+
+# Delete Category and Bookmarks inside it
+@categories_bp.route("/api/categories/<string:category_id>", methods=["DELETE"])
+def delete_Category(category_id):
+    category = db.session.get(Category, category_id)
+
+    if not category:
+        return response(
+            success=False,
+            message="Category Not Found",
+            status_code=404
+        )
+
+    db.session.delete(category)
+    db.session.commit()
+
+    return response(
+        success=True,
+        message="Category and Associated Bookmarks Deleted",
+        data={
+            "deleted_id": category_id
+        }
+    )
