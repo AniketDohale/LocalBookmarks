@@ -1,0 +1,52 @@
+const bookmarkId = document.getElementById("updateForm").dataset.bookmarkId;
+
+async function loadBookmark() {
+    const response = await fetch(`/api/bookmarks/${bookmarkId}`);
+    const data = await response.json();
+    const bookmark = data.data;
+
+    document.getElementById("title").value = bookmark.title || "";
+    document.getElementById("url").value = bookmark.url || "";
+    document.getElementById("category").value = bookmark.category || "";
+    document.getElementById("tags").value = bookmark.tags.join(", ");
+}
+
+loadBookmark();
+
+document.getElementById("updateForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        const payload = {
+            title:
+                document.getElementById("title").value,
+
+            url:
+                document.getElementById("url").value,
+
+            category:
+                document.getElementById("category").value,
+
+            tags:
+                document.getElementById("tags").value.split(",").map(tag => tag.trim()).filter(tag => tag !== "")
+        };
+
+        const response = await fetch(
+            `/api/bookmarks/${bookmarkId}`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            }
+        );
+
+        const data = await response.json();
+        if (data.success) {
+
+            document.getElementById("message").innerHTML =  "<p>Bookmark Updated Successfully</p>";
+        } 
+        else {
+            document.getElementById("message").innerHTML =  `<p>${data.message}</p>`;
+        }
+    });

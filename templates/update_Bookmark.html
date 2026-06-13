@@ -1,22 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Update Bookmark</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>LocalBookmark</h1>
+{% block title %} Update Bookmark {% endblock %}
 
-    <nav>
-        <a href="/">Home</a> |
-        <a href="/favorites-page">Favorites</a>
-    </nav>
+{% block extra_nav %}
+<a href="/favorites-page">Favorites</a>
+{% endblock %}
 
-    <hr>
+{% block content %}
 
-    <h2>Update Bookmark</h2>
+<h2>Update Bookmark</h2>
 
-    <form id="updateForm">
+    <form id="updateForm" data-bookmark-id="{{ bookmark_id }}">
         <div>
             <label>Title</label><br>
             <input type="text" id="title">
@@ -53,75 +47,8 @@
     <hr>
 
     <div id="message"></div>
+{% endblock %}
 
-    <script>
-        const bookmarkId = "{{ bookmark_id }}";
-        async function loadBookmark() {
-            const response = await fetch(
-                `/api/bookmarks/${bookmarkId}`
-            );
-            const data = await response.json();
-            const bookmark = data.data;
-
-            document.getElementById("title").value =
-                bookmark.title || "";
-
-            document.getElementById("url").value =
-                bookmark.url || "";
-
-            document.getElementById("category").value =
-                bookmark.category || "";
-
-            document.getElementById("tags").value =
-                bookmark.tags.join(", ");
-        }
-
-        loadBookmark();
-
-        document
-            .getElementById("updateForm")
-            .addEventListener("submit", async function(event) {
-                event.preventDefault();
-                const payload = {
-                    title:
-                        document.getElementById("title").value,
-
-                    url:
-                        document.getElementById("url").value,
-
-                    category:
-                        document.getElementById("category").value,
-
-                    tags:
-                        document.getElementById("tags")
-                            .value
-                            .split(",")
-                            .map(tag => tag.trim())
-                            .filter(tag => tag !== "")
-                };
-
-                const response = await fetch(
-                    `/api/bookmarks/${bookmarkId}`,
-                    {
-                        method: "PUT",
-
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(payload)
-                    }
-                );
-
-                const data = await response.json();
-                if (data.success) {
-
-                    document.getElementById("message").innerHTML =
-                        "<p>Bookmark Updated Successfully</p>";
-                } else {
-                    document.getElementById("message").innerHTML =
-                        `<p>${data.message}</p>`;
-                }
-            });
-    </script>
-</body>
-</html>
+{% block scripts %}
+<script src="{{ url_for('static', filename='scripts/update_Bookmark.js') }}"></script>
+{% endblock %}

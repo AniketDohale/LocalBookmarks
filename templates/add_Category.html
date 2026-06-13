@@ -1,69 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Category</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>LocalBookmarks</h1>
+{% block title %} Add Category {% endblock %}
 
-    <nav>
-        <a href="/">Home</a> |
-        <a href="/favorites-page">Favorites</a>
-    </nav>
+{% block extra_nav %}
+<a href="/favorites-page">Favorites</a>
+{% endblock %}
 
-    <hr>
+{% block content %}
+<h2>Add Category</h2>
 
-    <h2> Add Categories </h2>
+<form id="categoryForm">
+    <input type="text" id="categoryName" placeholder="Enter Category Name" required>
+    <button type="submit">
+        Create Category
+    </button>
+</form>
 
-    <form id="categoryForm">
-        <label>Category Name:</label>
-        <br><br>
+<p id="message"></p>
+{% endblock %}
 
-        <input type="text" id="categoryName" placeholder="Enter category name" required>
-
-        <br><br>
-
-        <button type="submit">
-            Create Category
-        </button>
-
-    </form>
-
-    <p id="message"></p>
-
-    <script>
-        document.getElementById("categoryForm")
-            .addEventListener("submit", async function(e) {
-
-                e.preventDefault();
-
-                const name = document.getElementById("categoryName").value.trim();
-                const response = await fetch("/api/categories", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        name: name
-                    })
-                });
-
-                const data = await response.json();
-                const message = document.getElementById("message");
-
-                if (data.success) {
-                    message.style.color = "green";
-                    message.textContent = "Category created successfully";
-
-                    setTimeout(() => {
-                        window.location.href = "/";
-                    }, 1000);
-                } else {
-                    message.style.color = "red";
-                    message.textContent = data.message;
-                }
-            });
-    </script>
-</body>
-</html>
+{% block scripts %}
+<script src="{{ url_for('static', filename='scripts/add_Category.js') }}"></script>
+{% endblock %}

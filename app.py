@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from models import db
+from core.models import db
 from routes.bookmarks import bookmarks_bp
 from routes.categories import categories_bp
 

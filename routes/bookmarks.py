@@ -1,6 +1,6 @@
 from flask import Blueprint, request
-from models import db, Bookmark, Tag, Category
-from utils import is_Valid_Url, response
+from core.models import db, Bookmark, Tag, Category
+from core.utils import is_Valid_Url, response
 
 bookmarks_bp = Blueprint("bookmarks", __name__)
 

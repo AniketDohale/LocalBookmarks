@@ -1,114 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Bookmark</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-    <h1>LocalBookmark</h1>
+{% block title %} Add Bookmark {% endblock %}
 
-    <nav>
-        <a href="/">Home</a> |
-        <a href="/favorites-page">Favorites</a>
-    </nav>
+{% block extra_nav %}
+<a href="/favorites-page">Favorites</a>
+{% endblock %}
 
-    <hr>
+{% block content %}
+<h2>Add Bookmark</h2>
 
-    <h2>Add Bookmark</h2>
+<form id="bookmarkForm">
+    <div>
+        <label>Title</label><br>
+        <input type="text" id="title" required>
+    </div>
 
-    <form id="bookmarkForm">
+    <br>
 
-        <div>
-            <label>Title</label><br>
-            <input type="text" id="title" required>
-        </div>
+    <div>
+        <label>URL</label><br>
+        <input type="text" id="url" required>
+    </div>
 
-        <br>
+    <br>
 
-        <div>
-            <label>URL</label><br>
-            <input type="text" id="url" required>
-        </div>
+    <div>
+        <label>Category</label><br>
+        <input type="text" id="category" readonly>
+    </div>
 
-        <br>
+    <br>
 
-        <div>
-            <label>Category</label><br>
-            <input type="text" id="category" readonly>
-        </div>
+    <div>
+        <label>Tags (comma separated)</label><br>
+        <input type="text" id="tags">
+    </div>
 
-        <br>
+    <br>
 
-        <div>
-            <label>Tags (comma separated)</label><br>
-            <input type="text" id="tags">
-        </div>
+    <button type="submit">
+        Add Bookmark
+    </button>
 
-        <br>
+</form>
 
-        <button type="submit">
-            Add Bookmark
-        </button>
+<hr>
 
-    </form>
+<div id="message"></div>
 
-    <hr>
+{% endblock %}
 
-    <div id="message"></div>
-
-    <script>
-        document.getElementById("bookmarkForm").addEventListener("submit", async function(event) {
-                event.preventDefault();
-
-                const payload = {
-
-                    title: document.getElementById("title").value,
-                    url: document.getElementById("url").value,
-                    category: document.getElementById("category").value,
-                    tags: document
-                        .getElementById("tags")
-                        .value
-                        .split(",")
-                        .map(tag => tag.trim())
-                        .filter(tag => tag !== "")
-                };
-
-                const response = await fetch("/api/bookmarks", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify(payload)
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    document.getElementById("message").innerHTML = `
-                        <p>Bookmark Added Successfully</p>
-                    `;
-                    document.getElementById("bookmarkForm").reset();
-                } else {
-                    document.getElementById("message").innerHTML = `
-                        <p>${data.message}</p>
-                    `;
-                }
-            });
-
-            function getQueryParam(name) {
-                const urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get(name);
-            }
-
-            window.onload = function () {
-                const category = getQueryParam("category");
-
-                if (category) {
-                    document.getElementById("category").value = category;
-                    document.getElementById("category").disabled = true;
-                }
-            };
-    </script>
-</body>
-</html>
+{% block scripts %}
+<script src="{{ url_for('static', filename='scripts/add_Bookmark.js') }}"></script>
+{% endblock %}

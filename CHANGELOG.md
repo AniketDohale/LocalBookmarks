@@ -8,7 +8,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [v1.3.0] - 2026-05-30
+## [v1.4.0] - 2026-06-13
+
+> ⚠️ This release is still under active development. Some features may be incomplete or subject to change.
+
+### Added
+- Base template (base.html) with Jinja blocks (content, scripts, extra_nav)
+- Modular JS structure under `static/scripts/`
+
+### Changed
+- Moved all inline JavaScript to static files
+- Replaced repeated navigation with template inheritance
+- Updated pages to fully use extends `base.html`
+
+### Fixed
+- Fixed missing function errors after JS modularization
+- Fixed Jinja variables inside static JS files
+- Fixed broken category/bookmark API integration
+- Fixed DOM timing issues in external scripts
+- Fixed navigation inconsistencies across pages
+
+### Removed
+- Inline `<script>` blocks from templates
+- Duplicate navigation code
+- Jinja usage inside static JS files
+
+---
+
+## [v1.3.0] - 2026-06-13
 
 > ⚠️ This release is still under active development. Some features may be incomplete or subject to change.
 

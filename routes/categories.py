@@ -1,6 +1,6 @@
 from flask import Blueprint, request
-from models import db, Category
-from utils import response
+from core.models import db, Category
+from core.utils import response
 
 categories_bp = Blueprint("categories", __name__)
 
