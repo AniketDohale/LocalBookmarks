@@ -3,15 +3,44 @@
 {% block title %} Home {% endblock %}
 
 {% block extra_nav %}
-<a href="/favorites-page">Favorites</a>
-| <a href="/add-category">Create Category</a>
+<a href="/favorites-page" class="nav-btn" >Favorites</a>
+<a href="#" class="nav-btn" onclick="openCategoryModal()">Create Category</a>
 {% endblock %}
 
 {% block content %}
-<h2>Categories</h2>
+<div class="header-row">
+    <h2>Categories</h2>
+</div>
 <div id="categories"></div>
+
+<!-- Add Category Modal -->
+<div id="categoryModal" class="modal">
+    <div class="modal-content">
+
+        <div class="header-row">
+            <h2>Add Category</h2>
+        </div>
+
+        <form id="categoryForm" class="modal-body">
+            <input type="text" id="categoryName" placeholder="Enter Category Name" required>
+
+            <p id="message"></p>
+
+            <div class="modal-actions">
+                <button type="button" class="modal-btn cancel" onclick="closeCategoryModal()">
+                    Cancel
+                </button>
+
+                <button type="submit" class="modal-btn" >
+                    Create Category
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='scripts/main.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/add_Category.js') }}"></script>
 {% endblock %}

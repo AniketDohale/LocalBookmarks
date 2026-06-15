@@ -2,19 +2,25 @@
 <html>
 <head>
     <title>{% block title %}LocalBookmarks{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/modal.css') }}">
+    {% block styles %}{% endblock %}
 </head>
 <body>
 
-    <h1>LocalBookmarks</h1>
+    <div class="container header-container">
+        <h1 class="head-logo">LocalBookmarks</h1>
+        <nav class="nav-bar">
+            <a href="/" class="nav-btn">Home</a>
+            {% block extra_nav %} {% endblock %}
+        </nav>
+    </div>
 
-    <nav>
-        <a href="/">Home</a> |
-        {% block extra_nav %} {% endblock %}
-    </nav>
-
-    <hr>
-
-    {% block content %} {% endblock %}
+    <div class="container">
+        {% block content %} {% endblock %}
+    </div>
 
     {% block scripts %} {% endblock %}
 

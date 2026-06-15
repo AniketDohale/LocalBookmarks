@@ -3,15 +3,69 @@
 {% block title %} {{ category_name }} {% endblock %}
 
 {% block extra_nav %}
-<a href="/favorites-page">Favorites</a>
-| <a href="/add?category={{ category_name }}">Add Bookmark</a>
+<a href="/favorites-page" class="nav-btn">Favorites</a>
+<a href="#" class="nav-btn" onclick="openBookmarkModal()">Add Bookmark</a>
 {% endblock %}
 
 {% block content %}
-<h2>Category: {{ category_name }}</h2>
+<div class="header-row">
+    <h2>Category: {{ category_name }}</h2>
+</div>
 <div id="bookmarks"  data-category="{{ category_name }}"></div>
+
+<!-- Add Bookmark Modal -->
+<div id="bookmarkModal" class="modal">
+    <div class="modal-content">
+        <div class="header-row">
+            <h2>Add Bookmark</h2>
+        </div>
+        <form id="bookmarkForm" class="modal-body">
+            <input type="text" id="title" placeholder="Title" required>
+            <input type="url" id="url" placeholder="URL" required>
+            <input type="text" id="category" value="{{ category_name }}" readonly>
+            <input type="text" id="tags" placeholder="Tags (comma separated)">
+            <div id="bookmarkMessage"></div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn cancel" onclick="closeBookmarkModal()">
+                    Cancel
+                </button>
+                <button type="submit" class="modal-btn">
+                    Add Bookmark
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Update Bookmark Modal -->
+<div id="updateBookmarkModal" class="modal">
+    <div class="modal-content">
+        <div class="header-row">
+            <h2>Update Bookmark</h2>
+        </div>
+        <form id="updateForm" class="modal-body">
+            <input type="hidden" id="update-bookmark-id">
+            <input type="text" id="update-title" placeholder="Title">
+            <input type="url" id="update-url" placeholder="URL">
+            <input type="text" id="update-category" placeholder="Category">
+            <input type="text" id="update-tags" placeholder="Tags">
+            <div id="updateMessage"></div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn cancel" onclick="closeUpdateBookmarkModal()">
+                    Cancel
+                </button>
+
+                <button type="submit" class="modal-btn">
+                    Update Bookmark
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='scripts/categories.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/add_Bookmark.js') }}"></script>
+<script src="{{ url_for('static', filename='scripts/update_Bookmark.js') }}"></script>
 {% endblock %}

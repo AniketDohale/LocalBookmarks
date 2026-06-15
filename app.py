@@ -25,22 +25,10 @@ def home():
 def category_bookmarks_page(category_name):
     return render_template("categories.html", category_name=category_name)
 
-@app.route("/add-category")
-def create_category_page():
-    return render_template("add_Category.html")
-
-@app.route("/add")
-def add_page():
-    return render_template("add_bookmark.html")
-
-@app.route("/update/<string:bookmark_id>")
-def update_page(bookmark_id):
-    return render_template("update_bookmark.html", bookmark_id=bookmark_id)
-
 @app.route("/favorites-page")
 def favorites_page():
     return render_template("favorites_Bookmark.html")
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=3002, debug=False)

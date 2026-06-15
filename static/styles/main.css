@@ -1,0 +1,116 @@
+#categories,
+#favorites,
+#bookmarks {
+    margin: 0 auto;
+    padding: 18px 16px 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 10px;
+    max-width: 1100px;
+}
+
+.card {
+    -webkit-tap-highlight-color: transparent;
+    background: #161b22;
+    border: 1px solid #2a2f3a;
+    border-radius: 8px;
+    padding: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.card:hover {
+    border-color: #4da3ff;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.card a {
+    text-decoration: none;
+    color: #e6edf3;
+    font-weight: 700;
+    font-size: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card .bookmark-count {
+    min-width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 999px;
+    background: rgba(77, 163, 255, 0.15);
+}
+
+.card .bookmark-text {
+    margin: 8px 0 0;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.card .action-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 10px;
+}
+
+.card .btn {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #2a2f3a;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-rename {
+    background: rgba(76, 175, 80, 0.15);
+    color: #5cd960;
+}
+
+.btn-rename:hover {
+    background: rgba(61, 82, 62, 0.15);
+}
+
+.btn-delete {
+    background: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+}
+
+.btn-delete:hover {
+    background: rgba(93, 61, 58, 0.15);
+}
+
+.btn-edit {
+    background: rgba(60, 231, 200, 0.15);
+    color: #3ce7d9;
+}
+
+.btn-edit:hover {
+    background: rgba(60, 151, 134, 0.15);
+}
+
+.btn-favorite {
+    background: rgba(200, 231, 60, 0.15);
+    color: #aee73c;
+}
+
+.btn-favorite:hover {
+    background: rgba(93, 101, 58, 0.15);
+}
+
+.empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #8b949e;
+    padding: 40px 20px;
+}

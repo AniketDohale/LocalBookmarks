@@ -5,27 +5,26 @@ async function loadFavorites() {
     let output = "";
 
     if (data.data.bookmarks.length === 0) {
-        output = "<p>No Favorite Bookmarks Found</p>";
+        output = `<div class="empty">No Favorite Bookmarks Found</div>`;
     } 
     else {
         data.data.bookmarks.forEach(bookmark => {
             output += `
-                <div>
-                    <h2>${bookmark.title}</h2>
-                    <p>
+                <div class="card">
+                    <h3>${bookmark.title}</h3>
+                    <p class="bookmark-text">
                         <a href="${bookmark.url}" target="_blank">
                             ${bookmark.url}
                         </a>
                     </p>
 
-                    <p>
+                    <p class="bookmark-text">
                         Category: ${bookmark.category || "None"}
                     </p>
 
-                    <button onclick="removeFavorite('${bookmark.id}')"> Remove Favorite </button>
-
-                    <hr>
-
+                    <div class="action-row">
+                        <button onclick="removeFavorite('${bookmark.id}')" class="btn btn-delete"> Remove Favorite </button>
+                    </div>
                 </div>
             `;
         });

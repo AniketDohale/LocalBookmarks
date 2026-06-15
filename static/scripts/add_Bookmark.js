@@ -1,11 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
-
-    function getQueryParam(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
-    }
-
     const form = document.getElementById("bookmarkForm");
+
+    if (!form) return;
 
     form.addEventListener("submit", async function(event) {
         event.preventDefault();
@@ -25,22 +21,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const data = await response.json();
 
-        const messageBox = document.getElementById("message");
+        const messageBox = document.getElementById("bookmarkMessage");
 
         if (data.success) {
-            messageBox.innerHTML = `<p>Bookmark Added Successfully</p>`;
-            form.reset();
-        } else {
-            messageBox.innerHTML = `<p>${data.message}</p>`;
+            messageBox.style.color = "green";
+            messageBox.textContent = "Bookmark Added Successfully";
+
+            setTimeout(() => {
+                closeBookmarkModal();
+                location.reload();
+            }, 1000);
+        } 
+        else {
+            messageBox.style.color = "red";
+            messageBox.textContent = data.message;
         }
     });
+});
 
-    const category = getQueryParam("category");
+window.openBookmarkModal = function () {
+    document.getElementById("bookmarkModal").style.display = "flex";
+    document.body.style.overflow = "hidden";
+};
 
-    if (category) {
-        const categoryInput = document.getElementById("category");
-        categoryInput.value = category;
-        categoryInput.disabled = true;
+window.closeBookmarkModal = function () {
+    document.getElementById("bookmarkModal").style.display = "none";
+    document.body.style.overflow = "";
+
+    document.getElementById("bookmarkForm").reset();
+    document.getElementById("bookmarkMessage").textContent = "";
+};
+
+window.addEventListener("click", function (e) {
+    const modal = document.getElementById("bookmarkModal");
+
+    if (e.target === modal) {
+        closeBookmarkModal();
     }
-
 });

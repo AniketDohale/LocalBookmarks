@@ -24,3 +24,24 @@ document.getElementById("categoryForm").addEventListener("submit", async functio
             message.textContent = data.message;
         }
     });
+
+window.openCategoryModal = function () {
+    document.getElementById("categoryModal").style.display = "flex";
+    document.body.style.overflow = "hidden";
+};
+
+window.closeCategoryModal = function () {
+    document.getElementById("categoryModal").style.display = "none";
+    document.body.style.overflow = "";
+    
+    document.getElementById("message").textContent = "";
+    document.getElementById("categoryForm").reset();
+};
+
+window.addEventListener("click", function (e) {
+    const modal = document.getElementById("categoryModal");
+
+    if (e.target === modal) {
+        closeCategoryModal();
+    }
+});

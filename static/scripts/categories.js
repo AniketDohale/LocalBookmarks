@@ -6,26 +6,26 @@ async function loadBookmarks() {
     let output = "";
 
     if (data.data.bookmarks.length === 0) {
-        output = "<p>No Bookmarks Found</p>";
+        output = `<div class="empty">No Bookmarks Found</div>`;
     } 
     else {
         data.data.bookmarks.forEach(bookmark => {
             output += `
-                <div>
-                    <h2>${bookmark.title}</h2>
-                    <p>
+                <div class="card">
+                    <h3>${bookmark.title}</h3>
+                    <p class="bookmark-text">
                         <a href="${bookmark.url}" target="_blank">
                             ${bookmark.url}
                         </a>
                     </p>
-                    <p> Created At: ${bookmark.created_at} </p>                        
-                    <p> Updated At: ${bookmark.updated_at} </p>
-                    <p>Tags: ${bookmark.tags.join(", ")}</p>
-                    <a href="/update/${bookmark.id}"> Edit </a>
-                    <button onclick="toggleFavorite('${bookmark.id}')" > ${bookmark.is_favorite ? "Remove Favorite" : "Make Favorite"} </button>
-                    <button onclick="deleteBookmark('${bookmark.id}')"> Delete </button>
-
-                    <hr>
+                    <p class="bookmark-text"> Created At: ${bookmark.created_at} </p>                        
+                    <p class="bookmark-text"> Updated At: ${bookmark.updated_at} </p>
+                    <p class="bookmark-text">Tags: ${bookmark.tags.join(", ")}</p>
+                    <div class="action-row">
+                        <button onclick="openUpdateBookmarkModal('${bookmark.id}')" class="btn btn-edit"> Edit </button>
+                        <button onclick="toggleFavorite('${bookmark.id}')" class="btn btn-favorite"> ${bookmark.is_favorite ? "Remove Favorite" : "Make Favorite"} </button>
+                        <button onclick="deleteBookmark('${bookmark.id}')" class="btn btn-delete"> Delete </button>
+                    </div>
                 </div>
             `;
         });

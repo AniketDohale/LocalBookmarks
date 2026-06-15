@@ -8,6 +8,40 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [v1.5.0] - 2026-06-16
+
+> ⚠️ This release is still under active development. Some features may be incomplete or subject to change.
+
+### Added
+- Added UI Style to Application
+- Create Category modal on the home page
+- Add Bookmark modal within category pages
+- Update Bookmark modal within category pages
+- Reusable modal open/close handlers
+
+### Changed
+- Category creation now happens without leaving the home page
+- Bookmark creation and editing now happens directly from the category page
+- Improved workflow by keeping users on the current page during CRUD operations
+- Reused modal styling `(modal.css)` across bookmark and category management
+
+### Fixed
+- Fixed bookmark form state reset when closing modals
+- Fixed modal message cleanup between operations
+- Fixed bookmark update form population from API data
+- Fixed page navigation interruptions during add/edit operations
+
+### Removed
+- Dedicate Add Category Page `(add_Category.html)`
+- Dedicated Add Bookmark page `(add_Bookmark.html)`
+- Dedicated Update Bookmark page `(update_Bookmark.html)`
+- /add-category route for category creation
+- /add route for bookmark creation
+- /update/<bookmark_id> route for bookmark editing
+- Query-string based category prefill logic for bookmark creation
+
+---
+
 ## [v1.4.0] - 2026-06-13
 
 > ⚠️ This release is still under active development. Some features may be incomplete or subject to change.

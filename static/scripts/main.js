@@ -4,32 +4,28 @@ async function loadCategories() {
 
     let output = "";
     if (data.data.length === 0) {
-        output = "<p>No Categories Found</p>";
+        output = `<div class="empty">No Categories Found</div>`;
     } 
     else {
         data.data.forEach(category => {
             output += `
-                <div>
+                <div class="card">
                     <h3>
                         <a href="/category/${category.name}">
-                            ${category.name}
+                            <span class="category-name">${category.name}</span>
+                            <span class="bookmark-count">${category.bookmark_count}</span>
                         </a>
-                    </h3>
+                    </h3>                   
 
-                    <p>
-                        Bookmarks: ${category.bookmark_count}
-                    </p>
+                    <div class="action-row">
+                        <button onclick="renameCategory('${category.id}', '${category.name}')" class="btn btn-rename">
+                            Rename
+                        </button>
 
-                    <button onclick="renameCategory('${category.id}', '${category.name}')">
-                        Rename
-                    </button>
-
-                    <button onclick="deleteCategory('${category.id}', '${category.name}')">
-                        Delete
-                    </button>
-
-                    <hr>
-
+                        <button onclick="deleteCategory('${category.id}', '${category.name}')" class="btn btn-delete">
+                            Delete
+                        </button>
+                    </div>
                 </div>
             `;
         });
