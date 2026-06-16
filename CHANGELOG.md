@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added “Copy URL” action button in bookmark cards for quick clipboard access
 - Added responsive action row behavior for better mobile usability
 - Improved mobile layout of bookmark cards to prevent overflow on small screens
+- Added "Copy URL" Fallback method.
 
 ### Changed
 - Category and Tag names now preserve the original user-entered capitalization
@@ -30,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Fixed Category and Tag names being automatically converted to lowercase during creation and updates
 - Fixed URLs losing their original casing when bookmarks were created or edited
+- Fixed Copy URL for raspberry pi
 
 ---
 

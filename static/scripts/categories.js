@@ -75,4 +75,25 @@ async function copyUrl(url, btn) {
         console.error(err);
     }
 }
+
+function fallbackCopy(url) {
+    const textArea = document.createElement("textarea");
+    textArea.value = url;
+
+    textArea.style.position = "fixed";
+    textArea.style.left = "-9999px";
+
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    try {
+        document.execCommand("copy");
+        alert("Copied!");
+    } catch (err) {
+        console.error("Copy Failed:", err);
+        alert("Copy not Supported");
+    }
+
+    document.body.removeChild(textArea);
+}
 loadBookmarks();
