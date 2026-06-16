@@ -98,7 +98,6 @@ function fallbackCopy(url) {
 
     try {
         document.execCommand("copy");
-        alert("Copied!");
     } catch (err) {
         console.error("Copy Failed:", err);
         alert("Copy not Supported");
