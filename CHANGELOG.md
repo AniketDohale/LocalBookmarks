@@ -17,12 +17,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Added responsive action row behavior for better mobile usability
 - Improved mobile layout of bookmark cards to prevent overflow on small screens
 - Added "Copy URL" Fallback method.
+- Added Icons style
 
 ### Changed
 - Category and Tag names now preserve the original user-entered capitalization
 - Category and Tag lookups are now case-insensitive while retaining display formatting
 - URL storage now preserves the original URL casing instead of converting URLs to lowercase
 - Removed URL uniqueness enforcement, allowing the same URL to be saved multiple times with different titles, tags, or categories
+- Action buttons changed to icon style
 
 ### Improved
 - Enhanced Category and Tag matching to prevent duplicate categories regardless of capitalization

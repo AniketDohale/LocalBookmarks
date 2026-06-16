@@ -22,10 +22,21 @@ async function loadBookmarks() {
                     <p class="bookmark-text"> Updated At: ${bookmark.updated_at} </p>
                     <p class="bookmark-text">Tags: ${bookmark.tags.join(", ")}</p>
                     <div class="action-row">
-                        <button onclick="copyUrl('${bookmark.url}', this)" class="btn btn-copy"> Copy </button>
-                        <button onclick="openUpdateBookmarkModal('${bookmark.id}')" class="btn btn-edit"> Edit </button>
-                        <button onclick="toggleFavorite('${bookmark.id}')" class="btn btn-favorite"> ${bookmark.is_favorite ? "Remove Favorite" : "Make Favorite"} </button>
-                        <button onclick="deleteBookmark('${bookmark.id}')" class="btn btn-delete"> Delete </button>
+                        <button onclick="copyUrl('${bookmark.url}', this)" class="icon-btn btn-copy"> 
+                            <img src="/static/icons/copy.png" alt="Copy"> 
+                        </button>
+
+                        <button onclick="openUpdateBookmarkModal('${bookmark.id}')" class="icon-btn btn-rename"> 
+                            <img src="/static/icons/edit.png" alt="Edit"> 
+                        </button>
+
+                        <button onclick="toggleFavorite('${bookmark.id}', this)" class="icon-btn btn-favorite" title="Toggle Favorite"> 
+                            <img src="/static/icons/${bookmark.is_favorite ? 'favorite.png' : 'unfavorite.png'}" alt="Favorite">
+                        </button>
+                        
+                        <button onclick="deleteBookmark('${bookmark.id}')" class="icon-btn btn-delete"> 
+                            <img src="/static/icons/delete.png" alt="Delete">
+                        </button>
                     </div>
                 </div>
             `;
@@ -34,7 +45,7 @@ async function loadBookmarks() {
     document.getElementById("bookmarks").innerHTML = output;
 }
 
-async function toggleFavorite(bookmarkId) {
+async function toggleFavorite(bookmarkId, btn) {
     const response = await fetch(
         `/api/bookmarks/${bookmarkId}/favorite`,
         {
@@ -43,6 +54,13 @@ async function toggleFavorite(bookmarkId) {
     );
     const data = await response.json();
     if (data.success) {
+        const img = btn.querySelector("img");
+
+        const isFav = img.src.includes("favorite.png");
+
+        img.src = isFav
+            ? "/static/icons/unfavorite.png"
+            : "/static/icons/favorite.png";
         loadBookmarks();
     }
 }
@@ -75,9 +93,11 @@ async function copyUrl(url, btn) {
         }
 
         if (btn) {
-            const originalText = btn.innerText;
-            btn.innerText = "Copied!";
-            setTimeout(() => (btn.innerText = originalText), 1200);
+            const img = btn.querySelector("img");
+            const originalSrc = img.src;
+
+            img.src = "/static/icons/check.png";
+            setTimeout(() => (img.src = originalSrc), 3600);
         }
 
     } catch (err) {
@@ -105,4 +125,5 @@ function fallbackCopy(url) {
 
     document.body.removeChild(textArea);
 }
+
 loadBookmarks();

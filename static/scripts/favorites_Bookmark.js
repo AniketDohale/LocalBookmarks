@@ -11,7 +11,12 @@ async function loadFavorites() {
         data.data.bookmarks.forEach(bookmark => {
             output += `
                 <div class="card">
-                    <h3>${bookmark.title}</h3>
+                    <div class="favorite-header">
+                        <h3>${bookmark.title}</h3>
+                        <button onclick="removeFavorite('${bookmark.id}')" class="icon-btn btn-favorite"> 
+                            <img src="/static/icons/favorite.png" alt="Unfavorite">
+                        </button>
+                    </div>
                     <p class="bookmark-text">
                         <a href="${bookmark.url}" target="_blank">
                             ${bookmark.url}
@@ -21,10 +26,6 @@ async function loadFavorites() {
                     <p class="bookmark-text">
                         Category: ${bookmark.category || "None"}
                     </p>
-
-                    <div class="action-row">
-                        <button onclick="removeFavorite('${bookmark.id}')" class="btn btn-delete"> Remove Favorite </button>
-                    </div>
                 </div>
             `;
         });

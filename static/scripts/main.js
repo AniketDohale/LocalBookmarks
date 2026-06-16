@@ -10,21 +10,24 @@ async function loadCategories() {
         data.data.forEach(category => {
             output += `
                 <div class="card">
-                    <h3>
-                        <a href="/category/${category.name}">
-                            <span class="category-name">${category.name}</span>
-                            <span class="bookmark-count">${category.bookmark_count}</span>
+                    <div class="card-header">
+                        <a href="/category/${category.name}" class="category-name">
+                            ${category.name}
                         </a>
-                    </h3>                   
 
-                    <div class="action-row">
-                        <button onclick="renameCategory('${category.id}', '${category.name}')" class="btn btn-rename">
-                            Rename
-                        </button>
+                        <div class="right-side">
+                            <span class="bookmark-count">
+                                ${category.bookmark_count}
+                            </span>
 
-                        <button onclick="deleteCategory('${category.id}', '${category.name}')" class="btn btn-delete">
-                            Delete
-                        </button>
+                            <button onclick="renameCategory('${category.id}', '${category.name}')" class="icon-btn btn-rename">
+                                <img src="/static/icons/edit.png" alt="Rename">
+                            </button>
+
+                            <button onclick="deleteCategory('${category.id}', '${category.name}')" class="icon-btn btn-delete">
+                                <img src="/static/icons/delete.png" alt="Delete">
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;

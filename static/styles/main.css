@@ -2,7 +2,7 @@
 #favorites,
 #bookmarks {
     margin: 0 auto;
-    padding: 18px 16px 40px;
+    padding: 18px 10px 40px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
     gap: 10px;
@@ -23,6 +23,33 @@
 .card:hover {
     border-color: #4da3ff;
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.card .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.card .category-name {
+    text-decoration: none;
+    color: #e6edf3;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.card .right-side {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.favorite-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
 }
 
 .card a {
@@ -56,6 +83,25 @@
     color: #6b7280;
 }
 
+.card .icon-btn {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.card .icon-btn img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
 .card .action-row {
     display: flex;
     justify-content: flex-end;
@@ -65,18 +111,8 @@
     padding-top: 10px;
 }
 
-.card .btn {
-    padding: 6px 10px;
-    border-radius: 8px;
-    border: 1px solid #2a2f3a;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
 .btn-rename {
     background: rgba(76, 175, 80, 0.15);
-    color: #5cd960;
 }
 
 .btn-rename:hover {
@@ -85,7 +121,6 @@
 
 .btn-delete {
     background: rgba(231, 76, 60, 0.15);
-    color: #e74c3c;
 }
 
 .btn-delete:hover {
@@ -101,18 +136,8 @@
     background: rgba(77, 163, 255, 0.25);
 }
 
-.btn-edit {
-    background: rgba(60, 231, 200, 0.15);
-    color: #3ce7d9;
-}
-
-.btn-edit:hover {
-    background: rgba(60, 151, 134, 0.15);
-}
-
 .btn-favorite {
     background: rgba(200, 231, 60, 0.15);
-    color: #aee73c;
 }
 
 .btn-favorite:hover {
@@ -128,7 +153,6 @@
 
 @media (max-width: 768px) {
     .card .action-row {
-        justify-content: space-between;
         flex-wrap: wrap;
         padding-top: 8px;
         margin-top: 10px;
