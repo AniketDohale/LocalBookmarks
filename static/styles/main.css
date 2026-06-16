@@ -4,7 +4,7 @@
     margin: 0 auto;
     padding: 18px 16px 40px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
     gap: 10px;
     max-width: 1100px;
 }
@@ -34,6 +34,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .card .bookmark-count {
@@ -57,7 +59,7 @@
 .card .action-row {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 5px;
     margin-top: 12px;
     border-top: 1px solid rgba(255,255,255,0.08);
     padding-top: 10px;
@@ -90,6 +92,15 @@
     background: rgba(93, 61, 58, 0.15);
 }
 
+.btn-copy {
+    background: rgba(77, 163, 255, 0.15);
+    color: #4da3ff;
+}
+
+.btn-copy:hover {
+    background: rgba(77, 163, 255, 0.25);
+}
+
 .btn-edit {
     background: rgba(60, 231, 200, 0.15);
     color: #3ce7d9;
@@ -113,4 +124,19 @@
     text-align: center;
     color: #8b949e;
     padding: 40px 20px;
+}
+
+@media (max-width: 768px) {
+    .card .action-row {
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding-top: 8px;
+        margin-top: 10px;
+    }
+
+    .card .action-row .btn {
+        flex: 1;
+        min-width: 80px;
+        text-align: center;
+    }
 }

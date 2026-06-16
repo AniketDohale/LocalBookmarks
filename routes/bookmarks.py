@@ -47,7 +47,7 @@ def get_Bookmarks():
     # Tag Filter
     if tag:
         bookmarks_query = bookmarks_query.join(Bookmark.tags).filter(
-            Tag.name.ilike(f"%{tag.lower()}%")
+            Tag.name.ilike(f"%{tag}%")
         )
     
     # Favorite Filter
@@ -59,7 +59,7 @@ def get_Bookmarks():
     # Category Filter
     if category:
         bookmarks_query = bookmarks_query.join(Category).filter(
-            Category.name.ilike(f"%{category.lower()}%")
+            Category.name.ilike(f"%{category}%")
         )
 
     # Search Filter
@@ -238,10 +238,10 @@ def add_Bookmark():
             status_code=400
         )
 
-    normalized_url = url.strip().lower().rstrip("/")
+    normalized_url = url.strip().rstrip("/")
 
     # Duplicate Check
-    existing_bookmark = Bookmark.query.filter_by(url=normalized_url).first()
+    existing_bookmark = Bookmark.query.filter(db.func.lower(Bookmark.url) == normalized_url.lower()).first()
     if existing_bookmark:
         return response(
             success=False,
@@ -252,8 +252,8 @@ def add_Bookmark():
     # Handle Category FIRST
     category = None
     if category_name:
-        cleaned_category = category_name.strip().lower()
-        category = Category.query.filter_by(name=cleaned_category).first()
+        cleaned_category = category_name.strip()
+        category = Category.query.filter(db.func.lower(Category.name) == cleaned_category.lower()).first()
 
         if not category:
             category = Category(name=cleaned_category)
@@ -269,12 +269,12 @@ def add_Bookmark():
 
     # Add Tags
     for tag_name in tags_data:
-        cleaned = tag_name.strip().lower()
+        cleaned = tag_name.strip()
 
         if not cleaned:
             continue
 
-        existing_tag = Tag.query.filter_by(name=cleaned).first()
+        existing_tag = Tag.query.filter(db.func.lower(Tag.name) == cleaned.lower()).first()
         if existing_tag:
             bookmark.tags.append(existing_tag)
         else:
@@ -324,12 +324,12 @@ def update_Bookmark(bookmark_id):
         bookmark.tags.clear()
 
         for tag_name in tags_data:
-            cleaned = tag_name.strip().lower()
+            cleaned = tag_name.strip()
 
             if not cleaned:
                 continue
 
-            existing_tag = Tag.query.filter_by(name=cleaned).first()
+            existing_tag = Tag.query.filter(db.func.lower(Tag.name) == cleaned.lower()).first()
 
             if existing_tag:
                 bookmark.tags.append(existing_tag)
@@ -340,23 +340,23 @@ def update_Bookmark(bookmark_id):
     
     # Update Category
     if category_name is not None:
-        cleaned_category = category_name.strip().lower()
+        cleaned_category = category_name.strip()
 
         if cleaned_category == "":
             bookmark.category = None
         else:
-            category = Category.query.filter_by(name=cleaned_category).first()
+            category = Category.query.filter(db.func.lower(Category.name) == cleaned_category.lower()).first()
 
             if not category:
                 category = Category(name=cleaned_category)
                 db.session.add(category)
             bookmark.category = category
 
-    if title:
-        bookmark.title = title
+    if title is not None:
+        bookmark.title = title.strip()
 
     if url:
-        bookmark.url = url.strip().lower().rstrip("/")
+        bookmark.url = url.strip().rstrip("/")
 
     db.session.commit()
 

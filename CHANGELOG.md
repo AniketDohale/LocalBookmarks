@@ -8,6 +8,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [v1.5.1] - 2026-06-16
+
+> ⚠️ This release is still under active development. Some features may be incomplete or subject to change.
+
+### Added
+- Added “Copy URL” action button in bookmark cards for quick clipboard access
+- Added responsive action row behavior for better mobile usability
+- Improved mobile layout of bookmark cards to prevent overflow on small screens
+
+### Changed
+- Category and Tag names now preserve the original user-entered capitalization
+- Category and Tag lookups are now case-insensitive while retaining display formatting
+- URL storage now preserves the original URL casing instead of converting URLs to lowercase
+- Removed URL uniqueness enforcement, allowing the same URL to be saved multiple times with different titles, tags, or categories
+
+### Improved
+- Enhanced Category and Tag matching to prevent duplicate categories regardless of capitalization
+- Improved bookmark metadata consistency by preserving user-defined naming conventions
+
+### Fixed
+- Fixed Category and Tag names being automatically converted to lowercase during creation and updates
+- Fixed URLs losing their original casing when bookmarks were created or edited
+
+---
+
 ## [v1.5.0] - 2026-06-16
 
 > ⚠️ This release is still under active development. Some features may be incomplete or subject to change.

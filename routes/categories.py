@@ -18,8 +18,8 @@ def create_Category():
             status_code=400
         )
 
-    cleaned = name.strip().lower()
-    existing = Category.query.filter_by(name=cleaned).first()
+    cleaned = name.strip()
+    existing = Category.query.filter(db.func.lower(Category.name) == cleaned.lower()).first()
 
     if existing:
         return response(
@@ -73,8 +73,8 @@ def rename_Category(category_id):
             status_code=400
         )
 
-    cleaned = name.strip().lower()
-    existing = Category.query.filter_by(name=cleaned).first()
+    cleaned = name.strip()
+    existing = Category.query.filter(db.func.lower(Category.name) == cleaned.lower()).first()
 
     if existing and existing.id != category.id:
         return response(

@@ -22,6 +22,7 @@ async function loadBookmarks() {
                     <p class="bookmark-text"> Updated At: ${bookmark.updated_at} </p>
                     <p class="bookmark-text">Tags: ${bookmark.tags.join(", ")}</p>
                     <div class="action-row">
+                        <button onclick="copyUrl('${bookmark.url}', this)" class="btn btn-copy"> Copy </button>
                         <button onclick="openUpdateBookmarkModal('${bookmark.id}')" class="btn btn-edit"> Edit </button>
                         <button onclick="toggleFavorite('${bookmark.id}')" class="btn btn-favorite"> ${bookmark.is_favorite ? "Remove Favorite" : "Make Favorite"} </button>
                         <button onclick="deleteBookmark('${bookmark.id}')" class="btn btn-delete"> Delete </button>
@@ -65,4 +66,13 @@ async function deleteBookmark(bookmarkId) {
     }
 }
 
+async function copyUrl(url, btn) {
+    try {
+        await navigator.clipboard.writeText(url);
+        btn.innerText = "Copied!";
+        setTimeout(() => (btn.innerText = "Copy"), 1200);
+    } catch (err) {
+        console.error(err);
+    }
+}
 loadBookmarks();
