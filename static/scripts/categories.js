@@ -68,11 +68,21 @@ async function deleteBookmark(bookmarkId) {
 
 async function copyUrl(url, btn) {
     try {
-        await navigator.clipboard.writeText(url);
-        btn.innerText = "Copied!";
-        setTimeout(() => (btn.innerText = "Copy"), 1200);
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(url);
+        } else {
+            fallbackCopy(url);
+        }
+
+        if (btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "Copied!";
+            setTimeout(() => (btn.innerText = originalText), 1200);
+        }
+
     } catch (err) {
-        console.error(err);
+        console.error("Clipboard Error:", err);
+        fallbackCopy(url);
     }
 }
 
