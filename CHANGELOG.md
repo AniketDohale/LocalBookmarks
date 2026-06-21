@@ -8,6 +8,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [v1.5.2] - 2026-06-21
+
+> ⚠️ This release is still under active development. Some features may be incomplete or subject to change.
+
+### Added
+- Added "Copy URL" action button to favorite bookmark cards
+- Added bookmark deletion support directly from the favorites view
+- Added category badge alignment in favorite bookmarks
+
+### Changed
+- Simplified favorite bookmark card structure by removing the redundant `favorite-header` wrapper
+- Refactored bookmark card markup for better consistency across views
+
+### Improved
+- Unified spacing and alignment between category and favorite bookmark cards
+- Enhanced visual consistency across bookmark card layouts
+- Reduced unnecessary DOM nesting for cleaner frontend structure
+- Aligned available bookmark actions across category and favorites views
+
+### Fixed
+- Fixed inconsistent spacing between bookmark titles and URLs in different bookmark views
+- Fixed alignment differences between category bookmarks and favorite bookmarks
+- Fixed layout inconsistencies caused by the previous favorite card header wrapper
+
+---
+
 ## [v1.5.1] - 2026-06-16
 
 > ⚠️ This release is still under active development. Some features may be incomplete or subject to change.

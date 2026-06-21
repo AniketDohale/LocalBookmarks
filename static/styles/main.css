@@ -2,7 +2,7 @@
 #favorites,
 #bookmarks {
     margin: 0 auto;
-    padding: 18px 10px 40px;
+    padding: 10px 10px 40px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
     gap: 10px;
@@ -45,18 +45,33 @@
     gap: 6px;
 }
 
-.favorite-header {
+.badge-container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.cat-badge {
+    flex: 0 0 auto; 
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #fff;
+    color: #111;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.card .bookmark-text {
+    color: #6b7280;
 }
 
 .card a {
     text-decoration: none;
     color: #e6edf3;
-    font-weight: 700;
-    font-size: 16px;
+    font-weight: 500;
+    font-size: 12px;
 
     display: flex;
     align-items: center;
@@ -75,12 +90,6 @@
     font-weight: 700;
     border-radius: 999px;
     background: rgba(77, 163, 255, 0.15);
-}
-
-.card .bookmark-text {
-    margin: 8px 0 0;
-    font-size: 14px;
-    color: #6b7280;
 }
 
 .card .icon-btn {

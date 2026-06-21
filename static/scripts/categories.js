@@ -18,9 +18,10 @@ async function loadBookmarks() {
                             ${bookmark.url}
                         </a>
                     </p>
+                    <!--
                     <p class="bookmark-text"> Created At: ${bookmark.created_at} </p>                        
                     <p class="bookmark-text"> Updated At: ${bookmark.updated_at} </p>
-                    <p class="bookmark-text">Tags: ${bookmark.tags.join(", ")}</p>
+                    <p class="bookmark-text">Tags: ${bookmark.tags.join(", ")}</p> -->
                     <div class="action-row">
                         <button onclick="copyUrl('${bookmark.url}', this)" class="icon-btn btn-copy"> 
                             <img src="/static/icons/copy.png" alt="Copy"> 
